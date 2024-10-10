@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
-require('dotenv').config({ path:'/.env' });
+const path = require('node:path');
+require('dotenv').config({ path:'./.env' });
 
 app.set('view engine', 'ejs');
 
