@@ -9,9 +9,10 @@ router.get('/', async (req, res) => {
   try {
     const response = await axios.get(`${backendPath}/posts/all`);
     let loggedInStatus = await axios.get(`${backendPath}/auth/status`, {withCredentials: true});
+    console.log(loggedInStatus.data);
     res.render('index', { posts: response.data, verified: loggedInStatus.data });
   } catch (error) {
-    res.status(500).send('Error fetching posts');
+    res.status(500).send(error);
   }
 });
 
@@ -52,13 +53,12 @@ router.get('/login', (req, res) => {
 router.post('/login', async (req, res) => {
   try {
     const response = await axios.post('http://localhost:5000/auth/login', {
-      email: FormData.email,
-      password: FormData.password
+      email: req.body.email,
+      password: req.body.password
     });
-    // Save session data
-    req.session.user = response.data.user;
-    res.redirect('/');
   } catch (error) {
+    console.log(error);
+    console.log(req.body);
     res.status(400).send(error);
   }
 });
