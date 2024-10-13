@@ -1,3 +1,13 @@
+<header>
+  <nav>
+      <a href="/">Home</a>
+      <% if (verified) { %>
+        <%- include('partials/header_loggedIn') %>
+      <% } else { %>
+        <%- include('partials/header_loggedOut') %>
+      <% } %>
+  </nav>
+</header>
 <h1>Blog Posts</h1>
 <ul>
   <% posts.forEach(post => { %>

@@ -8,7 +8,8 @@ const backendPath = process.env.BACKEND_PATH;
 router.get('/', async (req, res) => {
   try {
     const response = await axios.get(`${backendPath}/posts/all`);
-    res.render('index', { posts: response.data });
+    let loggedInStatus = await axios.get(`${backendPath}/auth/status`, {withCredentials: true});
+    res.render('index', { posts: response.data, verified: loggedInStatus.data });
   } catch (error) {
     res.status(500).send('Error fetching posts');
   }
@@ -50,15 +51,15 @@ router.get('/login', (req, res) => {
 // Handle user login
 router.post('/login', async (req, res) => {
   try {
-    const response = await axios.post('http://localhost:3000/api/auth/login', {
-      username: req.body.username,
-      password: req.body.password
+    const response = await axios.post('http://localhost:5000/auth/login', {
+      email: FormData.email,
+      password: FormData.password
     });
     // Save session data
     req.session.user = response.data.user;
     res.redirect('/');
   } catch (error) {
-    res.status(400).send('Invalid credentials');
+    res.status(400).send(error);
   }
 });
 
